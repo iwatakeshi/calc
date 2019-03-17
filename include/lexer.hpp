@@ -35,16 +35,30 @@ class lexer {
   friend std::istream& operator>>(std::istream& istream, lexer& other) {
     other.position = 0;
     other.start_position = 0;
-    if(!other.tokens.empty()) {
+    if (!other.tokens.empty()) {
       other.tokens.clear();
     }
     std::getline(istream, other.source);
     return istream;
   }
 
+  friend lexer& operator>>(const std::string& source, lexer& other) {
+    other.reset();
+    other.source = source;
+    return other;
+  }
+
   friend std::ostream& operator<<(std::ostream& ostream, const lexer& other) {
 
     return ostream;
+  }
+
+  void reset() {
+    position = 0;
+    start_position = 0;
+    if (!tokens.empty()) {
+      tokens.clear();
+    }
   }
 
   void scan() {
@@ -147,7 +161,7 @@ class lexer {
         while (std::isdigit(peek()))
           next();
       } else {
-        throw error("Syntax error: Expected a numerical value after", ch);
+        throw error("Lex error: Expected a numerical value after", ch);
       }
     }
 

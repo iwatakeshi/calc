@@ -27,7 +27,8 @@ class parser {
       source(source), position(0) {}
   ~parser() {}
 
-  friend void operator>>(lexer& lexer, parser& parser) {
+  friend void operator >>(lexer& lexer, parser& parser) {
+    parser.reset();
     lexer.scan();
     parser.source = lexer.tokens;
   }
@@ -38,6 +39,13 @@ class parser {
       expressions.emplace_back(parse_expression());
     }
     return expressions;
+  }
+
+  void reset() {
+    position = 0;
+    if (!source.empty()) {
+      source.clear();
+    }
   }
 
   private:
@@ -135,7 +143,7 @@ class parser {
   }
 
   std::runtime_error error(const std::string& message) {
-    return std::runtime_error(message);
+    return std::runtime_error("Parse error: " + message);
   }
 
   bool eos() {

@@ -1,1 +1,40 @@
 # calc
+
+A simple and slick calculator for your terminal.
+
+## Usage
+
+```
+usage: calc [options]
+-h  --help     print this usage and exit
+-v  --version  print version information and exit
+-r  --repl     use read-eval-print loop mode
+-t  --tree     print the syntax tree
+```
+
+## Installation
+
+```bash
+# To compile, run make
+make
+# Change the permissions
+chmod +x 
+# Move it to the bin folder
+sudo mv ./calc /usr/local/bin/
+# Install the man page
+make man
+
+# or to perform all the tasks above
+make install
+
+# To remove the man page and calc, just run:
+make uninstall
+```
+
+## Description
+
+calc is a simple and slick calculator for your terminal. 
+This calculator supports the basic operators such as `+`, `-`, `*`, `/`, as well as
+the advanced operators `%`, and `^`. In addition, calc also supports scientific notation like
+`1e4`, `2.34e2`, etc. Lastly, calc can also print the abstract syntax tree in lisp-format.
+

@@ -1,36 +1,41 @@
 #include "include/ast_printer.hpp"
-#include "include/grammar/expression.hpp"
+#include "include/interpreter.hpp"
 #include "include/lexer.hpp"
 #include "include/parser.hpp"
-#include "include/interpreter.hpp"
-
+#include "include/repl.hpp"
 #include <iostream>
-#include <memory>
+#include <string>
+
 using namespace std;
 
-int main() {
+const string VERSION = "1.0.0-alpha";
+
+int main(int argc, char* argv[]) {
 
   core::lexer lexer;
   core::parser parser;
   core::ast_printer printer;
   core::interpreter interpreter;
-  cout << "> ";
-  cin >> lexer;
 
-  try {
-    lexer >> parser;
-    auto expression = parser.parse();
-    for (auto& expr : expression) {
-      auto result = interpreter.eval(expr.get());
-      if (result.second) {
-        cout << int(result.first) << endl;
-      } else {
-        cout << result.first << endl;
+  core::repl(argc, argv, VERSION, [&](string input, bool tree) {
+    try {
+      input >> lexer >> parser;
+      for (auto& expr : parser.parse()) {
+        if (tree) {
+          printer.print(expr.get());
+        } else {
+          auto result = interpreter.eval(expr.get());
+          if (result.second) {
+            cout << int(result.first) << endl;
+          } else {
+            cout << result.first << endl;
+          }
+        }
       }
+    } catch (const std::exception& e) {
+      std::cerr << e.what() << '\n';
     }
-  } catch (const std::exception& e) {
-    std::cerr << e.what() << '\n';
-  }
+  });
 
   return 0;
 }

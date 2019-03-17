@@ -16,6 +16,8 @@ enum token_type {
   slash,
   // '*'
   star,
+  // '%'
+  modulo,
   // '^'
   caret,
   // '('

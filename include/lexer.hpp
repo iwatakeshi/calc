@@ -3,17 +3,16 @@
 #include "token.hpp"
 #include <cctype>
 #include <exception>
+#include <iostream>
 #include <istream>
 #include <ostream>
 #include <string>
 #include <vector>
-#include <iostream>
 
 namespace core {
 class lexer {
   private:
   std::string source;
-  std::vector<token> tokens;
   int position;
   int start_position;
 
@@ -22,16 +21,23 @@ class lexer {
       source(""),
       position(0),
       start_position(0) {}
-  lexer(std::string source):
-    source(source), position(0),
-    start_position(0) {}
+  lexer(std::string source) :
+      source(source), position(0),
+      start_position(0) {}
 
   ~lexer() {}
+
+  std::vector<token> tokens;
 
   typedef typename std::vector<token>::iterator iterator;
   typedef typename std::vector<token>::const_iterator const_iterator;
 
   friend std::istream& operator>>(std::istream& istream, lexer& other) {
+    other.position = 0;
+    other.start_position = 0;
+    if(!other.tokens.empty()) {
+      other.tokens.clear();
+    }
     std::getline(istream, other.source);
     return istream;
   }
@@ -91,6 +97,12 @@ class lexer {
     case '/':
       add_token(slash);
       break;
+    case '%':
+      add_token(modulo);
+      break;
+    case '^':
+      add_token(caret);
+      break;
     case ' ':
     case '\r':
     case '\t':
@@ -99,7 +111,7 @@ class lexer {
       if (std::isdigit(ch)) {
         scan_number();
       } else {
-        throw error("Unexpected character", ch);
+        throw error("Syntax error: Unexpected character", ch);
       }
       break;
     }
@@ -135,11 +147,11 @@ class lexer {
         while (std::isdigit(peek()))
           next();
       } else {
-        throw error("Expected a numerical value after", ch);
+        throw error("Syntax error: Expected a numerical value after", ch);
       }
     }
 
-    return add_token(type, std::stod(source.substr(start_position, position)));
+    return add_token(type, std::stod(source.substr(start_position, position - start_position)));
   }
 
   char peek() {
@@ -159,7 +171,7 @@ class lexer {
     position++;
     return source[position - 1];
   }
-  
+
   bool eos() {
     return position >= source.length();
   }

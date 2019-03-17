@@ -1,0 +1,27 @@
+.\" Manpage for calc.
+.\" Contact iwatakeshi@gmail.com to correct errors or typos.
+.TH man 1 "16 March 2019" "1.0.0-alpha" "calc man page"
+.SH NAME
+calc \- calculate simple math expressions.
+.SH SYNOPSIS
+calc [options]
+.SH DESCRIPTION
+calc is a simple and slick calculator for your terminal.
+This calculator supports the basic operators such as "+", "-", "*", "/", as well as
+the advanced operators "%", and "^". In addition, calc also supports scientific notation like
+"1e4", "2.34e2", etc. Lastly, calc can also print the abstract syntax tree in lisp-format.
+.SH OPTIONS
+.IP -h  --help
+print this usage and exit
+.IP -v  --version
+print version information and exit
+.IP -r  --repl
+use read-eval-print loop mode
+.IP -t  --tree
+print the syntax tree
+.SH SEE ALSO
+bc(1)
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Takeshi Iwana (iwatakeshi@gmail.com)

@@ -31,6 +31,8 @@ enum token_type {
   integer,
 
   // Program
+
+  // end of file/stream
   eof = -1
 };
 
@@ -46,12 +48,10 @@ struct token {
 
   friend std::ostream& operator<<(std::ostream& os, const token& other) {
 
-    if (other.type == decimal) {
-      os << "( " << other.literal << " )";
-    } else if (other.type == integer) {
-      os << "( " << int(other.literal) << " )";
-    } else {
-      os << "( " << other.lexeme << " ) ";
+    if (other.type == decimal || other.type == integer) {
+      os << "( token: " << other.literal << " )";
+    }else {
+      os << "( token: " << other.lexeme << " ) ";
     }
 
     return os;

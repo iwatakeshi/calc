@@ -169,9 +169,7 @@ class lexer {
   }
 
   void add_token(token_type type, double literal) {
-    std::cout << "start: " << start_position << " end: " << position << std::endl;
-    const std::string lexeme = source.substr(start_position, position);
-    std::cout << "lexeme :" << lexeme << "!" << std::endl;
+    const std::string lexeme = source.substr(start_position, position - start_position);
     tokens.push_back(token(type, lexeme, literal));
   }
 

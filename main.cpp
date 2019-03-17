@@ -11,7 +11,6 @@ int main() {
   cin >> lexer;
 
   lexer.scan();
-  cout << "size of lex: " << lexer.size() << endl;
 
   for(auto x : lexer) {
     cout << x << endl;

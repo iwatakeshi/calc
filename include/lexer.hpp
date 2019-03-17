@@ -153,8 +153,14 @@ class lexer {
 
       if ((peek() == '+' || peek() == '-')) {
         ch = peek();
+
+        if (peek() == '-') {
+          type = token_type::decimal;
+        }
+        
         // Consume '+' || Consume '-'
         next();
+        
       }
 
       if (std::isdigit(peek())) {
@@ -164,7 +170,7 @@ class lexer {
         throw error("Lex error: Expected a numerical value after", ch);
       }
     }
-
+    
     return add_token(type, std::stod(source.substr(start_position, position - start_position)));
   }
 

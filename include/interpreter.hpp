@@ -36,22 +36,22 @@ struct interpreter : public expression::visitor {
 
     switch (expr.op.type) {
     case token_type::plus:
-      push(left, right, left.literal + right.literal);
+      push(left, expr.op, right, left.literal + right.literal);
       break;
     case token_type::minus:
-      push(left, right, left.literal - right.literal);
+      push(left, expr.op, right, left.literal - right.literal);
       break;
     case token_type::star:
-      push(left, right, left.literal * right.literal);
+      push(left, expr.op, right, left.literal * right.literal);
       break;
     case token_type::slash:
-      push(left, right, left.literal / right.literal);
+      push(left, expr.op, right, left.literal / right.literal);
       break;
     case token_type::modulo:
-      push(left, right, (int(left.literal) % int(right.literal)));
+      push(left, expr.op, right, (int(left.literal) % int(right.literal)));
       break;
     case token_type::caret:
-      push(left, right, std::pow(left.literal, right.literal));
+      push(left, expr.op, right, std::pow(left.literal, right.literal));
     default:
       break;
     }
@@ -73,8 +73,8 @@ struct interpreter : public expression::visitor {
   }
 
   private:
-  void push(token left, token right, double value) {
-    if (is_integer(left, right)) {
+  void push(token left, token op, token right, double value) {
+    if (is_integer(left, right) && op.type != token_type::slash) {
       stack.push(token(token_type::integer, std::to_string(value), value));
     } else {
       stack.push(token(token_type::decimal, std::to_string(value), value));

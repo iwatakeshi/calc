@@ -18,7 +18,7 @@ usage: calc [options]
 # To compile, run make
 make
 # Change the permissions
-chmod +x 
+chmod +x ./calc
 # Move it to the bin folder
 sudo mv ./calc /usr/local/bin/
 # Install the man page

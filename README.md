@@ -41,5 +41,5 @@ make uninstall
 calc is a simple and slick calculator for your terminal. 
 This calculator supports the basic operators such as `+`, `-`, `*`, `/`, as well as
 the advanced operators `%`, and `^`. In addition, calc also supports scientific notation like
-`1e4`, `2.34e2`, etc. Lastly, calc can also print the abstract syntax tree in lisp format.
+`1e4`, `2.34e2`, etc. Lastly, calc can also print the abstract syntax tree in LISP format.
 

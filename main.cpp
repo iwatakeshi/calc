@@ -12,12 +12,12 @@ const string VERSION = "1.0.0-alpha";
 
 int main(int argc, char* argv[]) {
 
-  core::lexer lexer;
-  core::parser parser;
-  core::ast_printer printer;
-  core::interpreter interpreter;
+  calc::lexer lexer;
+  calc::parser parser;
+  calc::ast_printer printer;
+  calc::interpreter interpreter;
 
-  core::repl(argc, argv, VERSION, [&](string input, bool tree) {
+  calc::repl(argc, argv, VERSION, [&](string input, bool tree) {
     try {
       input >> lexer >> parser;
       for (auto& expr : parser.parse()) {

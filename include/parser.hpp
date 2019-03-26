@@ -12,7 +12,7 @@
 
 // Resources: http://pages.cs.wisc.edu/~fischer/cs536.s08/course.hold/html/NOTES/3.CFG.html
 
-namespace core {
+namespace calc {
 class parser {
   using expression_t = std::unique_ptr<expression>;
 
@@ -151,6 +151,6 @@ class parser {
   }
 };
 
-} // core
+} // calc
 
 #endif

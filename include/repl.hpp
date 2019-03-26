@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-namespace core {
+namespace calc {
 
 bool contains(const std::vector<std::string>& v, const std::string& flag) {
   return std::find(v.begin(), v.end(), flag) != v.end();
@@ -122,6 +122,6 @@ void repl(int argc, char* argv[], const std::string v, std::function<void(std::s
     callback(input, tree);
   }
 }
-} // core
+} // calc
 
 #endif

@@ -9,7 +9,7 @@
 #include <cmath>
 #include <utility>
 
-namespace core {
+namespace calc {
 struct interpreter : public expression::visitor {
   interpreter() {}
   // https://stackoverflow.com/a/32378819
@@ -89,6 +89,6 @@ struct interpreter : public expression::visitor {
     return left.type == token_type::integer && right.type == token_type::integer;
   }
 };
-} // core
+} // calc
 
 #endif

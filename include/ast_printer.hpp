@@ -5,7 +5,7 @@
 #include <vector>
 #include <iostream>
 
-namespace core {
+namespace calc {
 struct ast_printer : public expression::visitor {
   ast_printer(): ast("") {};
 
@@ -42,6 +42,6 @@ struct ast_printer : public expression::visitor {
       ast += ")";
     }
 };
-} // core
+} // calc
 
 #endif

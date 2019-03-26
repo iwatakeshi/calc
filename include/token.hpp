@@ -3,7 +3,7 @@
 #include <ostream>
 #include <string>
 
-namespace core {
+namespace calc {
 
 enum token_type {
   // Operators
@@ -64,6 +64,6 @@ struct token {
   double literal;
 };
 
-} // core
+} // calc
 
 #endif

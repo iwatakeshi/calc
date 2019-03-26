@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-namespace core {
+namespace calc {
 class lexer {
   private:
   std::string source;
@@ -210,6 +210,6 @@ class lexer {
   }
 };
 
-} // core
+} // calc
 
 #endif

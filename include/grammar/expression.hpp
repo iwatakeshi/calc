@@ -3,7 +3,7 @@
 #include "../token.hpp"
 #include <memory>
 
-namespace core {
+namespace calc {
 
 struct unary;
 struct binary;
@@ -69,6 +69,6 @@ struct group : public expression {
   std::unique_ptr<expression> grouped;
 };
 
-} // core
+} // calc
 
 #endif

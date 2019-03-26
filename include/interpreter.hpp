@@ -9,7 +9,7 @@
 #include <cmath>
 #include <utility>
 
-namespace core {
+namespace calc {
 struct interpreter : public expression::visitor {
   interpreter() {}
   // https://stackoverflow.com/a/32378819
@@ -19,7 +19,7 @@ struct interpreter : public expression::visitor {
     visit(expr.right.get());
     token right = stack.top();
     stack.pop();
-    if (expr.op.type == token_type::minus) {
+    if (expr.op.type == token::minus) {
       stack.push(token(right.type, std::to_string(-(right.literal)), -(right.literal)));
     } else {
       stack.push(right);
@@ -35,22 +35,22 @@ struct interpreter : public expression::visitor {
     stack.pop();
 
     switch (expr.op.type) {
-    case token_type::plus:
+    case token::plus:
       push(left, expr.op, right, left.literal + right.literal);
       break;
-    case token_type::minus:
+    case token::minus:
       push(left, expr.op, right, left.literal - right.literal);
       break;
-    case token_type::star:
+    case token::star:
       push(left, expr.op, right, left.literal * right.literal);
       break;
-    case token_type::slash:
+    case token::slash:
       push(left, expr.op, right, left.literal / right.literal);
       break;
-    case token_type::modulo:
+    case token::modulo:
       push(left, expr.op, right, (int(left.literal) % int(right.literal)));
       break;
-    case token_type::caret:
+    case token::caret:
       push(left, expr.op, right, std::pow(left.literal, right.literal));
     default:
       break;
@@ -69,15 +69,15 @@ struct interpreter : public expression::visitor {
     expr->accept(*this);
     token value = stack.top();
     stack.pop();
-    return std::make_pair(value.literal, value.type == token_type::integer);
+    return std::make_pair(value.literal, value.type == token::integer);
   }
 
   private:
   void push(token left, token op, token right, double value) {
-    if (is_integer(left, right) && op.type != token_type::slash) {
-      stack.push(token(token_type::integer, std::to_string(value), value));
+    if (is_integer(left, right) && op.type != token::slash) {
+      stack.push(token(token::integer, std::to_string(value), value));
     } else {
-      stack.push(token(token_type::decimal, std::to_string(value), value));
+      stack.push(token(token::decimal, std::to_string(value), value));
     }
   }
 
@@ -86,9 +86,9 @@ struct interpreter : public expression::visitor {
   }
 
   bool is_integer(token left, token right) {
-    return left.type == token_type::integer && right.type == token_type::integer;
+    return left.type == token::integer && right.type == token::integer;
   }
 };
-} // core
+} // calc
 
 #endif

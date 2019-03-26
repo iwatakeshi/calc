@@ -2,14 +2,19 @@
 
 A simple and slick calculator for your terminal.
 
+![calc](images/calc.png "calc")
+
 ## Usage
 
 ```
 usage: calc [options]
--h  --help     print this usage and exit
--v  --version  print version information and exit
--r  --repl     use read-eval-print loop mode
--t  --tree     print the syntax tree
+-h  --help           print this usage and exit
+-v  --version        print version information and exit
+-r  --repl           use read-eval-print loop mode
+-t  --tree           print the syntax tree
+-b  --output-binary  print the result in binary
+-o  --output-octal   print the result in octal
+-x  --output-hex     print the result in hexidecimal
 ```
 
 ## Installation

@@ -12,7 +12,7 @@
 
 // Resources: http://pages.cs.wisc.edu/~fischer/cs536.s08/course.hold/html/NOTES/3.CFG.html
 
-namespace core {
+namespace calc {
 class parser {
   using expression_t = std::unique_ptr<expression>;
 
@@ -55,7 +55,7 @@ class parser {
 
   expression_t parse_addition() {
     auto left = parse_multiplication();
-    while (match({ token_type::plus, token_type::minus })) {
+    while (match({ token::plus, token::minus })) {
       token op = previous();
       auto right = parse_multiplication();
       left = expression_t(new binary(std::move(left), op, std::move(right)));
@@ -66,7 +66,7 @@ class parser {
 
   expression_t parse_multiplication() {
     auto left = parse_exponentation();
-    while (match({ token_type::star, token_type::slash, token_type::modulo })) {
+    while (match({ token::star, token::slash, token::modulo })) {
       token op = previous();
       auto right = parse_exponentation();
       left = expression_t(new binary(std::move(left), op, std::move(right)));
@@ -76,7 +76,7 @@ class parser {
 
   expression_t parse_exponentation() {
     auto left = parse_unary();
-    while (match({ token_type::caret })) {
+    while (match({ token::caret })) {
       token op = previous();
       auto right = parse_exponentation();
       left = expression_t(new binary(std::move(left), op, std::move(right)));
@@ -86,7 +86,7 @@ class parser {
   }
 
   expression_t parse_unary() {
-    if (match({ token_type::minus })) {
+    if (match({ token::minus })) {
       token op = previous();
       auto right = parse_unary();
       return expression_t(new unary(op, std::move(right)));
@@ -96,20 +96,20 @@ class parser {
   }
 
   expression_t parse_primary() {
-    if (match({ token_type::integer, token_type::decimal })) {
+    if (match({ token::integer, token::decimal, token::binary, token::octal, token::hex })) {
       return expression_t(new literal(previous()));
     }
 
-    if (match({ token_type::lparen })) {
+    if (match({ token::lparen })) {
       auto expr = parse_expression();
-      consume(token_type::rparen, "Expected '(' after expression");
+      consume(token::rparen, "Expected '(' after expression");
       return expression_t(new group(std::move(expr)));
     }
 
     throw error("Expected a primary expression");
   }
 
-  bool match(std::vector<token_type> types) {
+  bool match(std::vector<token::token_type> types) {
     for (auto& type : types) {
       if (check(type)) {
         next();
@@ -119,7 +119,7 @@ class parser {
     return false;
   }
 
-  bool check(token_type type) {
+  bool check(token::token_type type) {
     if (eos()) return false;
     return peek().type == type;
   }
@@ -137,7 +137,7 @@ class parser {
     return previous();
   }
 
-  token consume(token_type type, const std::string& message) {
+  token consume(token::token_type type, const std::string& message) {
     if (check(type)) return next();
     throw error(message);
   }
@@ -147,10 +147,10 @@ class parser {
   }
 
   bool eos() {
-    return position >= source.size() || peek().type == token_type::eof;
+    return position >= source.size() || peek().type == token::eof;
   }
 };
 
-} // core
+} // calc
 
 #endif

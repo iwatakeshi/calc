@@ -3,44 +3,11 @@
 #include <ostream>
 #include <string>
 
-namespace core {
-
-enum token_type {
-  // Operators
-
-  // '+'
-  plus,
-  // '-'
-  minus,
-  // '/'
-  slash,
-  // '*'
-  star,
-  // '%'
-  modulo,
-  // '^'
-  caret,
-  // '('
-  lparen,
-  // ')'
-  rparen,
-
-  // Literals
-
-  // floating point numbers
-  decimal,
-  // whole numbers
-  integer,
-
-  // Program
-
-  // end of file/stream
-  eof = -1
-};
+namespace calc {
 
 struct token {
+  enum token_type : int;
   token() {}
-
   token(token_type type, std::string lexeme, double literal) :
       type(type),
       lexeme(lexeme),
@@ -52,18 +19,56 @@ struct token {
 
     if (other.type == decimal || other.type == integer) {
       os << "( token: " << other.literal << " )";
-    }else {
+    } else {
       os << "( token: " << other.lexeme << " ) ";
     }
 
     return os;
   }
 
+  enum token_type : int {
+    // Operators
+
+    // '+'
+    plus,
+    // '-'
+    minus,
+    // '/'
+    slash,
+    // '*'
+    star,
+    // '%'
+    modulo,
+    // '^'
+    caret,
+    // '('
+    lparen,
+    // ')'
+    rparen,
+
+    // Literals
+
+    // floating point numbers
+    decimal,
+    // whole numbers
+    integer,
+    // binary
+    binary,
+    // hexidecimal
+    hex,
+    // octal
+    octal,
+    // Program
+
+    // end of file/stream
+    eof = -1
+  };
+
   token_type type;
   std::string lexeme;
   double literal;
 };
 
-} // core
+} // calc
 
 #endif

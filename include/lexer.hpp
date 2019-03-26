@@ -6,6 +6,7 @@
 #include <iostream>
 #include <istream>
 #include <ostream>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -66,7 +67,7 @@ class lexer {
       start_position = position;
       scan_tokens();
     }
-    tokens.push_back(token(eof, "eof", 0));
+    tokens.push_back(token(token::eof, "eof", 0));
   }
 
   iterator begin() {
@@ -94,28 +95,28 @@ class lexer {
     char ch = next();
     switch (ch) {
     case '(':
-      add_token(lparen);
+      add_token(token::lparen);
       break;
     case ')':
-      add_token(rparen);
+      add_token(token::rparen);
       break;
     case '+':
-      add_token(plus);
+      add_token(token::plus);
       break;
     case '-':
-      add_token(minus);
+      add_token(token::minus);
       break;
     case '*':
-      add_token(star);
+      add_token(token::star);
       break;
     case '/':
-      add_token(slash);
+      add_token(token::slash);
       break;
     case '%':
-      add_token(modulo);
+      add_token(token::modulo);
       break;
     case '^':
-      add_token(caret);
+      add_token(token::caret);
       break;
     case ' ':
     case '\r':
@@ -123,7 +124,23 @@ class lexer {
       break;
     default:
       if (std::isdigit(ch)) {
-        scan_number();
+        bool zero = (ch == '0');
+        if (zero) {
+          next();
+        }
+        if (zero && std::tolower(peek()) == 'b') {
+          next();
+          scan_binary();
+        } else if (zero && std::tolower(peek()) == 'o') {
+          next();
+          scan_octal();
+        } else if (zero && std::tolower(peek()) == 'x') {
+          next();
+          scan_hex();
+        } else {
+          scan_number();
+        }
+
       } else {
         throw error("Syntax error: Unexpected character", ch);
       }
@@ -132,13 +149,13 @@ class lexer {
   }
 
   void scan_number() {
-    token_type type = token_type::integer;
+    token::token_type type = token::integer;
     while (std::isdigit(peek()))
       next();
 
     // Determine whether we are dealing with
     if (peek() == '.' && std::isdigit(peek(1))) {
-      type = token_type::decimal;
+      type = token::decimal;
       // Consume '.'
       next();
 
@@ -155,12 +172,11 @@ class lexer {
         ch = peek();
 
         if (peek() == '-') {
-          type = token_type::decimal;
+          type = token::decimal;
         }
-        
+
         // Consume '+' || Consume '-'
         next();
-        
       }
 
       if (std::isdigit(peek())) {
@@ -170,8 +186,27 @@ class lexer {
         throw error("Lex error: Expected a numerical value after", ch);
       }
     }
-    
+
     return add_token(type, std::stod(source.substr(start_position, position - start_position)));
+  }
+
+  void scan_binary() {
+    while (peek() >= '0' && peek() <= '1')
+      next();
+    return add_token(token::binary, std::stod(source.substr(start_position, position - start_position)));
+  }
+
+  void scan_octal() {
+    while (peek() >= '0' && peek() <= '7')
+      next();
+    return add_token(token::octal, std::stod(source.substr(start_position, position - start_position)));
+  }
+
+  void scan_hex() {
+
+    while (std::isdigit(peek()) || std::tolower(peek()) >= 'a' && std::tolower(peek()) <= 'f')
+      next();
+    return add_token(token::hex, std::stod(source.substr(start_position, position - start_position)));
   }
 
   char peek() {
@@ -192,15 +227,21 @@ class lexer {
     return source[position - 1];
   }
 
+  char next(int seek) {
+    while((seek--) > 0) {
+      next();
+    }
+  }
+
   bool eos() {
     return position >= source.length();
   }
 
-  void add_token(token_type type) {
+  void add_token(token::token_type type) {
     add_token(type, 0);
   }
 
-  void add_token(token_type type, double literal) {
+  void add_token(token::token_type type, double literal) {
     const std::string lexeme = source.substr(start_position, position - start_position);
     tokens.push_back(token(type, lexeme, literal));
   }

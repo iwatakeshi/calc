@@ -125,9 +125,7 @@ class lexer {
     default:
       if (std::isdigit(ch)) {
         bool zero = (ch == '0');
-        if (zero) {
-          next();
-        }
+        
         if (zero && std::tolower(peek()) == 'b') {
           next();
           scan_binary();
@@ -191,20 +189,29 @@ class lexer {
   }
 
   void scan_binary() {
+    if (!is_binary(peek())) {
+      throw error("Lex error: Expected a numerical value in binary after", peek(-1));
+    }
+    
     while (peek() >= '0' && peek() <= '1')
       next();
-    return add_token(token::binary, std::stod(source.substr(start_position, position - start_position)));
+    return add_token(token::binary, std::stoi(source.substr(start_position + 2, (position + 2) - start_position), 0, 2));
   }
 
   void scan_octal() {
+    if (!is_octal(peek())) {
+      throw error("Lex error: Expected a numerical value in octal after", peek(-1));
+    }
     while (peek() >= '0' && peek() <= '7')
       next();
-    return add_token(token::octal, std::stod(source.substr(start_position, position - start_position)));
+    return add_token(token::octal, std::stoi(source.substr(start_position + 2, (position + 2) - start_position), 0, 8));
   }
 
   void scan_hex() {
-
-    while (std::isdigit(peek()) || std::tolower(peek()) >= 'a' && std::tolower(peek()) <= 'f')
+    if (!is_hex(peek())) {
+      throw error("Lex error: Expected a numerical value in hexidecimal after", peek(-1));
+    }
+    while (std::isdigit(peek()) || (std::tolower(peek()) >= 'a' && std::tolower(peek()) <= 'f'))
       next();
     return add_token(token::hex, std::stod(source.substr(start_position, position - start_position)));
   }
@@ -231,6 +238,7 @@ class lexer {
     while((seek--) > 0) {
       next();
     }
+    return peek();
   }
 
   bool eos() {
@@ -244,6 +252,18 @@ class lexer {
   void add_token(token::token_type type, double literal) {
     const std::string lexeme = source.substr(start_position, position - start_position);
     tokens.push_back(token(type, lexeme, literal));
+  }
+
+  bool is_binary(char ch) {
+    return ch >= '0' && ch <= '1';
+  }
+
+  bool is_octal(char ch) {
+    return ch >= '0' && ch <= '7';
+  }
+
+  bool is_hex(char ch) {
+    return std::isdigit(ch) || (std::tolower(ch) >= 'a' && std::tolower(peek()) <= 'f');
   }
 
   std::runtime_error error(std::string message, char ch) {

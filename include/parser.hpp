@@ -96,7 +96,7 @@ class parser {
   }
 
   expression_t parse_primary() {
-    if (match({ token::integer, token::decimal })) {
+    if (match({ token::integer, token::decimal, token::binary, token::octal, token::hex })) {
       return expression_t(new literal(previous()));
     }
 

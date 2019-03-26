@@ -1,1 +1,0 @@
-load('//:buckaroo_macros.bzl', 'buckaroo_deps')

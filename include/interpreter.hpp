@@ -2,12 +2,12 @@
 #define CALC_INTERPRETER_HPP
 #include "grammar/expression.hpp"
 #include "token.hpp"
+#include <cmath>
 #include <iostream>
 #include <stack>
 #include <string>
-#include <vector>
-#include <cmath>
 #include <utility>
+#include <vector>
 
 namespace calc {
 struct interpreter : public expression::visitor {
@@ -21,6 +21,8 @@ struct interpreter : public expression::visitor {
     stack.pop();
     if (expr.op.type == token::minus) {
       stack.push(token(right.type, std::to_string(-(right.literal)), -(right.literal)));
+    } else if (expr.op.type == token::bitwise_not) {
+      stack.push(token(right.type, std::to_string((~(int(right.literal)))), (~(int(right.literal)))));
     } else {
       stack.push(right);
     }
@@ -52,6 +54,16 @@ struct interpreter : public expression::visitor {
       break;
     case token::caret:
       push(left, expr.op, right, std::pow(left.literal, right.literal));
+      break;
+    case token::bitwise_and:
+      push(left, expr.op, right, int(left.literal) & int(right.literal));
+      break;
+    case token::bitwise_or:
+      push(left, expr.op, right, int(left.literal) | int(right.literal));
+      break;
+    case token::bitwise_xor:
+      push(left, expr.op, right, int(left.literal) ^ int(right.literal));
+      break;
     default:
       break;
     }

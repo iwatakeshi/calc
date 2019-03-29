@@ -43,3 +43,20 @@ This calculator supports the basic operators such as `+`, `-`, `*`, `/`, as well
 the advanced operators `%`, and `^`. In addition, calc also supports scientific notation like
 `1e4`, `2.34e2`, etc. Lastly, calc can also print the abstract syntax tree in Lisp format.
 
+## Operators
+
+|  Operator  |                Description                  | Precedence |
+|------------|---------------------------------------------|------------|
+|    `^`     | Raises a number to the power of the `n`     |     1      |
+|    `+`     | Adds two numbers                            |     4      |
+|    `-`     | Subtracts two numbers or negates a number   |     4      |
+|    `-`     | Negates a number                            |     2      |
+|    `*`     | Multiplies two numbers                      |     3      |
+|    `/`     | Divides two numbers                         |     3      |
+|    `%`     | Returns the remainder of two numbers        |     3      |
+| `~`, `not` | Bitwise *not* a number                      |     2      |
+| `&`, `and` | Bitwise *and* two numbers                   |     5      |
+| `|`, `or`  | Bitwise *or*  two numbers                   |     6      |
+| `\`, `xor` | Bitwise *xor* two numbers                   |     7      |
+
+> Note: Groupings *`(expression)`* have a precedence level of 0

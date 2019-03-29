@@ -46,6 +46,17 @@ struct token {
     // ')'
     rparen,
 
+    // Bitwise operators
+
+    // not
+    bitwise_not,
+    // and
+    bitwise_and,
+    // or
+    bitwise_or,
+    // xor
+    bitwise_xor,
+
     // Literals
 
     // floating point numbers

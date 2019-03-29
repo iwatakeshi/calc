@@ -1,6 +1,7 @@
 #ifndef CALC_LEX_HPP
 #define CALC_LEX_HPP
 #include "token.hpp"
+#include <algorithm>
 #include <cctype>
 #include <exception>
 #include <iostream>
@@ -118,6 +119,18 @@ class lexer {
     case '^':
       add_token(token::caret);
       break;
+    case '~':
+      add_token(token::bitwise_not);
+      break;
+    case '&':
+      add_token(token::bitwise_and);
+      break;
+    case '|':
+      add_token(token::bitwise_or);
+      break;
+    case '\\':
+      add_token(token::bitwise_xor);
+      break;
     case ' ':
     case '\r':
     case '\t':
@@ -125,7 +138,7 @@ class lexer {
     default:
       if (std::isdigit(ch)) {
         bool zero = (ch == '0');
-        
+
         if (zero && std::tolower(peek()) == 'b') {
           next();
           scan_binary();
@@ -139,6 +152,8 @@ class lexer {
           scan_number();
         }
 
+      } else if (std::isalpha(std::tolower(ch))) {
+        scan_bitwise_operator();
       } else {
         throw error("Syntax error: Unexpected character", ch);
       }
@@ -192,7 +207,7 @@ class lexer {
     if (!is_binary(peek())) {
       throw error("Lex error: Expected a numerical value in binary after", peek(-1));
     }
-    
+
     while (peek() >= '0' && peek() <= '1')
       next();
     return add_token(token::binary, std::stoi(source.substr(start_position + 2, (position + 2) - start_position), 0, 2));
@@ -216,6 +231,19 @@ class lexer {
     return add_token(token::hex, std::stod(source.substr(start_position, position - start_position)));
   }
 
+  void scan_bitwise_operator() {
+    while (std::isalpha(std::tolower(peek())))
+      next();
+    std::string lexeme = source.substr(start_position, position - start_position);
+    std::transform(lexeme.begin(), lexeme.end(), lexeme.begin(), ::tolower);
+    if (lexeme == "not") return add_token(token::bitwise_not);
+    if (lexeme == "and") return add_token(token::bitwise_and);
+    if (lexeme == "or") return add_token(token::bitwise_or);
+    if (lexeme == "xor") return add_token(token::bitwise_xor);
+
+    throw error("Syntax error: Unexpected identifier", lexeme);
+  }
+
   char peek() {
     if (eos()) return '\0';
     return source[position];
@@ -235,7 +263,7 @@ class lexer {
   }
 
   char next(int seek) {
-    while((seek--) > 0) {
+    while ((seek--) > 0) {
       next();
     }
     return peek();
@@ -268,6 +296,10 @@ class lexer {
 
   std::runtime_error error(std::string message, char ch) {
     return std::runtime_error(message + " " + "'" + ch + "'");
+  }
+
+  std::runtime_error error(std::string message, std::string string) {
+    return std::runtime_error(message + " " + "'" + string + "'");
   }
 };
 

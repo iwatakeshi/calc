@@ -27,7 +27,7 @@ class parser {
       source(source), position(0) {}
   ~parser() {}
 
-  friend void operator >>(lexer& lexer, parser& parser) {
+  friend void operator>>(lexer& lexer, parser& parser) {
     parser.reset();
     lexer.scan();
     parser.source = lexer.tokens;
@@ -50,7 +50,40 @@ class parser {
 
   private:
   expression_t parse_expression() {
-    return parse_addition();
+    return parse_bitwise_or();
+  }
+
+  expression_t parse_bitwise_or() {
+    auto left = parse_bitwise_xor();
+    while (match({ token::bitwise_or })) {
+      token op = previous();
+      auto right = parse_bitwise_xor();
+      left = expression_t(new binary(std::move(left), op, std::move(right)));
+    }
+
+    return left;
+  }
+
+  expression_t parse_bitwise_xor() {
+    auto left = parse_bitwise_and();
+    while (match({ token::bitwise_xor })) {
+      token op = previous();
+      auto right = parse_bitwise_and();
+      left = expression_t(new binary(std::move(left), op, std::move(right)));
+    }
+
+    return left;
+  }
+
+  expression_t parse_bitwise_and() {
+    auto left = parse_addition();
+    while (match({ token::bitwise_and })) {
+      token op = previous();
+      auto right = parse_addition();
+      left = expression_t(new binary(std::move(left), op, std::move(right)));
+    }
+
+    return left;
   }
 
   expression_t parse_addition() {
@@ -86,7 +119,7 @@ class parser {
   }
 
   expression_t parse_unary() {
-    if (match({ token::minus })) {
+    if (match({ token::minus, token::bitwise_not })) {
       token op = previous();
       auto right = parse_unary();
       return expression_t(new unary(op, std::move(right)));

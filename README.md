@@ -47,7 +47,7 @@ the advanced operators `%`, and `^`. In addition, calc also supports scientific 
 
 |  Operator  |                Description                  | Precedence |
 |------------|---------------------------------------------|------------|
-|    `^`     | Raises a number to the power of the `n`     |     1      |
+|    `^`     | Raises a number to the power of `n`         |     1      |
 |    `+`     | Adds two numbers                            |     4      |
 |    `-`     | Subtracts two numbers or negates a number   |     4      |
 |    `-`     | Negates a number                            |     2      |

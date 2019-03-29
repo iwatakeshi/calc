@@ -24,7 +24,7 @@ struct output {
 
   friend std::ostream& operator<<(std::ostream& os, const output& other) {
     int integer_value = int(other.value);
-    int double_value = other.value;
+    double double_value = other.value;
 
     switch (other.type_) {
     case output::type::decimal:

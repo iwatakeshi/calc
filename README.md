@@ -56,7 +56,7 @@ the advanced operators `%`, and `^`. In addition, calc also supports scientific 
 |    `%`     | Returns the remainder of two numbers        |     3      |
 | `~`, `not` | Bitwise *not* a number                      |     2      |
 | `&`, `and` | Bitwise *and* two numbers                   |     5      |
-| `|`, `or`  | Bitwise *or*  two numbers                   |     6      |
-| `\`, `xor` | Bitwise *xor* two numbers                   |     7      |
+| `\|`, `or`  | Bitwise *or*  two numbers                   |     6      |
+| `\`, `xor`| Bitwise *xor* two numbers                   |     7      |
 
 > Note: Groupings *`(expression)`* have a precedence level of 0
